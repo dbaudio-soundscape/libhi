@@ -23,9 +23,9 @@ jobs:
           - name: Windows
             os: windows-latest
           - name: macOS Intel
-            os: macos-13
+            os: macos-15-intel
           - name: macOS Apple Silicon
-            os: macos-14
+            os: macos-15
 
     steps:
       - uses: actions/checkout@v4
