@@ -33,7 +33,7 @@ jobs:
       - name: Install Rust (stable)
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Print compiler host triple
+      - name: Print compiler host triplet
         run: rustc -Vv
 
       - name: Build workspace
