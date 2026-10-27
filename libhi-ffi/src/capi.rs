@@ -504,6 +504,12 @@ pub unsafe extern "C" fn hi_version(
     }
 }
 
+/// Type mapping for common OSC tags:
+///   - `i` -> `const int32_t*`
+///   - `f` -> `const float*`
+///   - `s` -> `const char*`
+///   - `h` -> `const int64_t*` (ffi::c_long is 32 bit on windows while 'h' is int64_t. So use i64 as pointer type.)
+///   - `d` -> `const double*`
 #[unsafe(no_mangle)]
 fn osctype_to_void_ptr(t: &OscType) -> *const c_void {
     match t {
@@ -511,7 +517,8 @@ fn osctype_to_void_ptr(t: &OscType) -> *const c_void {
         OscType::Float(i) => i as *const ffi::c_float as *const c_void,
         OscType::String(i) => CString::new(i.as_str()).unwrap().into_raw() as *const c_void,
         OscType::Blob(_) => todo!(),
-        OscType::Long(i) => i as *const ffi::c_long as *const c_void,
+        // ffi::c_long is 32 bit on windows while 'h' is int64_t. So use i64 as pointer type.
+        OscType::Long(i) => i as *const i64 as *const c_void,
         OscType::Double(i) => i as *const ffi::c_double as *const c_void,
         OscType::Char(i) => {
             <char as TryInto<u8>>::try_into(*i).unwrap() as *const u8 as *const c_void
